@@ -1,5 +1,5 @@
 
-import List from './ProductList'
+import List from './List'
 
 
 const item = new List()

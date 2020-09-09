@@ -14,10 +14,11 @@ export default class addCategory{
         button.classList.add('add_category_button');
         this.body.appendChild(button);
         this.body.appendChild(input);
-        
+     
     
         button.addEventListener( 'click', () => {
             const ul = document.createElement('ul');
+            ul.setAttribute('list-name', input.value)
             const h3 = document.createElement('h3');
             h3.innerHTML = input.value;
             ul.appendChild(h3);

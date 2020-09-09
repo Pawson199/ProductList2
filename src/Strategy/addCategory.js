@@ -4,17 +4,20 @@ export default class addCategory{
         this.direc = list_dir
         this.list = list
         this.body = document.querySelector('body')
+        this.section = document.createElement('section')
     }
     
     createButton(){
 
+        const section = this.section;
+        section.classList.add('add_category_field');
+
         const input = document.createElement('input');
         const button = document.createElement('button');
-        button.innerHTML = "Dodaj kategorię"
-        button.classList.add('add_category_button');
-        this.body.appendChild(button);
-        this.body.appendChild(input);
-     
+        button.innerHTML = "Dodaj kategorię";
+
+        [input, button].forEach( el => section.appendChild(el) )
+        this.body.appendChild(section);
     
         button.addEventListener( 'click', () => {
             const ul = document.createElement('ul');

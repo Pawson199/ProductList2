@@ -6,41 +6,92 @@ export default class addItem{
         this.button = document.createElement('button');
         this.body = document.querySelector('body')
         this.select = document.createElement('select');
+        this.section = document.createElement('section');
+        this.div = document.createElement('div');
+        this.input =  document.createElement('input');
+        this.label = document.createElement('label');
 
-        this.add_container = document.createElement('div');
-        this.add_container.classList.add('adding_container');
-        this.body.appendChild(this.add_container);
-        
         this.list = list
     };
 
     createButton() {
-        const buttton = document.createElement('button');
-        buttton.innerHTML = "dodaj produkt";
-        buttton.classList.add('add_item_button');
 
-        this.add_container.appendChild(this.select)
-        this.add_container.appendChild(buttton);
+        // Create place for all inputs, selects, and buttons 
+        // in adding component
+        const add_container = this.section;
+        add_container.classList.add('adding_container')
+        this.body.appendChild(add_container);
 
-        buttton.addEventListener( 'click', (e) => {
+        // Add two measures into measure_div
+        add_container.appendChild(
+            this.createInputs('kg', 'szt', 'radio', 'measure', true )
+        )
 
-            //show and hide section with adding panel
+        add_container.appendChild(
+            this.createInputs('Ilość', 'Nazwa', 'text', '', false )
+        )
+
+        // Add select input
+        add_container.appendChild(this.select);
+        this.body.appendChild(this.button);
+
+        // Button which will open and close item adding component, 
+        // and event onclick
+        const open_close_button = this.button;
+        open_close_button.innerHTML = "dodaj produkt";
+        open_close_button.classList.add('add_item_button');
+
+        open_close_button.addEventListener( 'click', (e) => {
+
             this.updateList()
             e.preventDefault()
 
         });
     }
 
+    // Create two inputs 
+    createInputs(inner1, inner2, type, name, flag){
+        const box = document.createElement('div');
+        for(let i = 0; i<2; i++){
+            const label = document.createElement('label');
+            const input = document.createElement('input');
+            
+            input.setAttribute('type', type);
+            input.setAttribute('name', name);
+
+            if(i === 0){
+                label.innerHTML = inner1;
+                flag ?
+                input.value = inner1
+                : 
+                null
+            }
+            else if(i === 1){
+                label.innerHTML = inner2;
+                flag ?
+                input.value = inner2
+                :
+                null
+            }
+
+            box.appendChild(label);
+            box.appendChild(input);
+        }
+        return box
+    }
+
+    // Update list of categories in select
     updateList() {
 
         [...this.list].forEach( el => {
             const name = el.getAttribute('list-name');
-            [...this.select].find( option => option.value === name ) !== undefined ?
+            [...this.select].find( option => option.value === name ) !== undefined 
+            ?
             null
             :
             this.select.add(new Option(name , name));
         } )
-      
+
     }
 
 }

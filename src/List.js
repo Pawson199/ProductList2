@@ -9,8 +9,8 @@ export default class List {
         this.createList()
         this.lista = document.querySelector('.products_list');
 
-        this.add_item = new addItem(this.list).createButton()
-        this.add_category = new addCategory(this.list, this.lista).createButton()
+        new addItem(this.list).createButton()
+        new addCategory(this.list, this.lista).createButton()
 
     }
 
@@ -25,7 +25,7 @@ export default class List {
             li.innerHTML = el.name;
             this.newlist.appendChild(li)
         })
-        
+
     }
 
 }

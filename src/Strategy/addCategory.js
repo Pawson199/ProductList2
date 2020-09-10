@@ -20,13 +20,25 @@ export default class addCategory{
         this.body.appendChild(section);
     
         button.addEventListener( 'click', () => {
+
             const ul = document.createElement('ul');
-            ul.setAttribute('list-name', input.value)
             const h3 = document.createElement('h3');
-            h3.innerHTML = input.value;
-            ul.appendChild(h3);
-            this.direc.appendChild(ul)
-            this.list.push(ul)
+
+            this.list.find( el => el.category === input.value ) !== undefined ?
+            console.log('ta kategoria juz istnieje')
+            :
+            ( ul.setAttribute('list-name', input.value),
+            h3.innerHTML = input.value,
+            ul.appendChild(h3),
+            this.direc.appendChild(ul),
+            this.list.push({
+                category: input.value,
+                items: []
+            })
+            )
+
+            console.log(this.list)
+
         });
 
     }

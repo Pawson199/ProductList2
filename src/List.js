@@ -6,25 +6,23 @@ export default class List {
 
         this.body = document.querySelector('body');
         this.list = []
-        this.createList()
-        this.lista = document.querySelector('.products_list');
+
+        this.newlist = document.createElement('ul');
+        this.newlist.classList.add('products_list');
 
         new addItem(this.list).createButton()
-        new addCategory(this.list, this.lista).createButton()
-
+        new addCategory(this.list, this.newlist).createButton()
+        this.createList()
     }
 
     createList(){
-
-        const newlist = document.createElement('ul');
-        newlist.classList.add('products_list');
-        this.body.appendChild(newlist)
 
         this.list.map( el => {
             const li = document.createElement('li');
             li.innerHTML = el.name;
             this.newlist.appendChild(li)
         })
+        this.body.appendChild(this.newlist)
 
     }
 

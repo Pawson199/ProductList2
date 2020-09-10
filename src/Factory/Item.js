@@ -1,16 +1,16 @@
 export default class Item {
 
-    constructor(pushed_name, pushed_quantity, pushed_category ){
+    constructor(pushed_name, pushed_quantity, pushed_measure ){
         
        this.state = {
            name: '',
            quantity: 0,
-           category:''
+           measure:''
        }
 
        this.setName(pushed_name);
        this.setQuantity(pushed_quantity);
-       this.setCategory(pushed_category);
+       this.setMeasure(pushed_measure);
 
        return this.state
     }
@@ -19,8 +19,8 @@ export default class Item {
         this.state.name = name1
     }
 
-    setCategory(category){
-        this.state.category = category
+    setMeasure(measure){
+        this.state.measure = measure
     }
 
     setQuantity(quantity){

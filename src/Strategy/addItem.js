@@ -3,14 +3,20 @@ import Inputs from './Appends/Inputs'
 
 export default class addItem{
 
-    constructor(list){
+    constructor(list, update){
 
-        this.button = document.createElement('button');
         this.body = document.querySelector('body')
         this.select = document.createElement('select');
         this.section = document.createElement('section');
-        this.section.classList.add('adding_container');
-        this.add_button = document.createElement('button')
+        this.add_button = document.createElement('button');
+        this.open_button = document.createElement('button');
+        
+        this.update = update
+        this.list = list
+    };
+
+
+    createSection() {
 
         this.body.appendChild(this.section);
 
@@ -20,29 +26,29 @@ export default class addItem{
         this.section.appendChild(
             Inputs('Ilość', 'Nazwa', 'text', '', false )
         );
-        this.section.appendChild(this.select);
 
         this.add_button.innerHTML = 'Zapisz'
+        this.open_button.innerHTML = "Dodaj produkt";
+
+        this.body.appendChild(this.open_button);
+        this.section.appendChild(this.select);
         this.section.appendChild(this.add_button);
-        this.add_button.addEventListener('click', () => this.addToList())
         
-        this.list = list
-    };
+        this.section.classList.add('adding_container');
+        this.open_button.classList.add('add_item_button');
+        
+        this.addListeners()
+    
+    }
 
+    addListeners(){
 
-    createButton() {
-
-        const open_close_button = this.button;
-        const add = this.button;
-        open_close_button.innerHTML = "dodaj produkt";
-        open_close_button.classList.add('add_item_button');
-        this.body.appendChild(open_close_button);
-
-        open_close_button.addEventListener( 'click', (e) => {
+        this.open_button.addEventListener( 'click', (e) => {
             this.updateSelect();
-            console.log(this.section.children)
             e.preventDefault()
         });
+
+        this.add_button.addEventListener('click', () => this.addToList())
     }
 
     
@@ -59,7 +65,6 @@ export default class addItem{
 
 
     addToList(){
-
         const dir = this.section.children;
 
         const measure = [...dir[0].children].find( el => el.checked === true ).value;
@@ -72,7 +77,6 @@ export default class addItem{
             items: [...this.list[index].items, new Item(name, quantity, measure)]
         }
 
-        console.log(this.list)
-
+        this.update('add',this.list[index])
     }
 }

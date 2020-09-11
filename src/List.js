@@ -10,20 +10,24 @@ export default class List {
         this.newlist = document.createElement('ul');
         this.newlist.classList.add('products_list');
 
-        new addItem(this.list).createButton()
-        new addCategory(this.list, this.newlist).createButton()
+        new addItem(this.list, this.update).createSection()
+        new addCategory(this.list, this.newlist).createSection()
         this.createList()
     }
 
     createList(){
-
-        this.list.map( el => {
-            const li = document.createElement('li');
-            li.innerHTML = el.name;
-            this.newlist.appendChild(li)
-        })
         this.body.appendChild(this.newlist)
+    }
 
+    update(action, load){
+
+        switch(action){
+
+            case 'add' : {
+                console.log('additem')
+            }
+
+        }
     }
 
 }

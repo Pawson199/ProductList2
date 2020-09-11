@@ -7,7 +7,7 @@ export default class addCategory{
         this.section = document.createElement('section')
     }
     
-    createButton(){
+    createSection(){
 
         const section = this.section;
         section.classList.add('add_category_field');

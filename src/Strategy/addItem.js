@@ -41,6 +41,7 @@ export default class addItem{
     
     }
 
+    
     addListeners(){
 
         this.open_button.addEventListener( 'click', (e) => {
@@ -67,16 +68,23 @@ export default class addItem{
     addToList(){
         const dir = this.section.children;
 
-        const measure = [...dir[0].children].find( el => el.checked === true ).value;
+        const measure = [...dir[0].children].find( el => el.checked === true );
         const quantity = dir[1].children[1].value;
         const name = dir[1].children[3].value;
 
-        const index = this.list.findIndex( el => el.category === this.select.value )
-        this.list[index] = {
-            ...this.list[index],
-            items: [...this.list[index].items, new Item(name, quantity, measure)]
+        if( measure !== undefined ? false : true || quantity === "" || name === "" ){
+            alert('Wypełnij wszystkie pola');
         }
-
-        this.update('add',this.list[index])
+        else if(this.select.children.length === 0){
+            alert('Nie dodałeś żadnej kategorii')
+        }
+        else{
+            const index = this.list.findIndex( el => el.category === this.select.value )
+            this.list[index] = {
+                ...this.list[index],
+                items: [...this.list[index].items, new Item(name, quantity, measure.value)]
+            }
+            this.update('add_item', this.list[index])
+        }
     }
 }

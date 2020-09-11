@@ -1,10 +1,12 @@
 export default class addCategory{
 
-    constructor(list, list_dir){
-        this.direc = list_dir
+    constructor(list, update){
+
+        this.update = update
         this.list = list
         this.body = document.querySelector('body')
         this.section = document.createElement('section')
+
     }
     
     createSection(){
@@ -14,6 +16,7 @@ export default class addCategory{
 
         const input = document.createElement('input');
         const button = document.createElement('button');
+
         button.innerHTML = "Dodaj kategorię";
 
         [input, button].forEach( el => section.appendChild(el) )
@@ -21,24 +24,17 @@ export default class addCategory{
     
         button.addEventListener( 'click', () => {
 
-            const ul = document.createElement('ul');
-            const h3 = document.createElement('h3');
-
             this.list.find( el => el.category === input.value ) !== undefined ?
+            
             console.log('ta kategoria juz istnieje')
             :
-            ( ul.setAttribute('list-name', input.value),
-            h3.innerHTML = input.value,
-            ul.appendChild(h3),
-            this.direc.appendChild(ul),
-            this.list.push({
+            (
+                this.list.push({
                 category: input.value,
                 items: []
-            })
+                }),
+                this.update('add_category', input.value)
             )
-
-            console.log(this.list)
-
         });
 
     }

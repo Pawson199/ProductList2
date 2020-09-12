@@ -24,7 +24,7 @@ export default class addItem{
             Inputs('kg', 'szt', 'radio', 'measure', true )
         )
         this.section.appendChild(
-            Inputs('Ilość', 'Nazwa', 'text', '', false )
+            Inputs('Nazwa', 'Ilość', 'text', '', false )
         );
 
         this.add_button.innerHTML = 'Zapisz'
@@ -36,12 +36,14 @@ export default class addItem{
         
         this.section.classList.add('adding_container');
         this.open_button.classList.add('add_item_button');
+
+        this.section.children[1].children[3].setAttribute('type', 'number')
         
         this.addListeners()
     
     }
 
-    
+
     addListeners(){
 
         this.open_button.addEventListener( 'click', (e) => {
@@ -69,21 +71,27 @@ export default class addItem{
         const dir = this.section.children;
 
         const measure = [...dir[0].children].find( el => el.checked === true );
-        const quantity = dir[1].children[1].value;
-        const name = dir[1].children[3].value;
-
-        if( measure !== undefined ? false : true || quantity === "" || name === "" ){
-            alert('Wypełnij wszystkie pola');
+        const quantity = dir[1].children[3];
+        const name = dir[1].children[1];
+        
+        const measure_condition = () => measure !== undefined ? false : true;
+        const add_borders = () => {
+            [name, quantity, this.select ].forEach( el => { el.value === "" ? el.style.border = 'red 1px solid' : el.style.border = ''})
         }
-        else if(this.select.children.length === 0){
-            alert('Nie dodałeś żadnej kategorii')
+        if( quantity.value === "" || name.value === "" || this.select.value === "" ){
+            add_borders();
+            return
+        }
+        else if( measure_condition() ){
+            add_borders();
+            alert('Nie wybrałeś miary')
         }
         else{
-            const index = this.list.findIndex( el => el.category === this.select.value )
+            const index = this.list.findIndex( el => el.category === this.select.value );
             this.list[index] = {
                 ...this.list[index],
-                items: [...this.list[index].items, new Item(name, quantity, measure.value)]
-            }
+                items: [...this.list[index].items, new Item(name.value, quantity.value, measure.value)]
+            };
             this.update('add_item', this.list[index])
         }
     }

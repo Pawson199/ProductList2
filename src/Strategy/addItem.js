@@ -5,14 +5,14 @@ export default class addItem{
 
     constructor(list, update){
 
-        this.body = document.querySelector('body')
+        this.body = document.querySelector('body');
         this.select = document.createElement('select');
         this.section = document.createElement('section');
         this.add_button = document.createElement('button');
         this.open_button = document.createElement('button');
         
-        this.update = update
-        this.list = list
+        this.update = update;
+        this.list = list;
     };
 
 
@@ -27,7 +27,7 @@ export default class addItem{
             Inputs('Nazwa', 'Ilość', 'text', '', false )
         );
 
-        this.add_button.innerHTML = 'Zapisz'
+        this.add_button.innerHTML = 'Zapisz';
         this.open_button.innerHTML = "Dodaj produkt";
 
         this.body.appendChild(this.open_button);
@@ -37,9 +37,9 @@ export default class addItem{
         this.section.classList.add('adding_container');
         this.open_button.classList.add('add_item_button');
 
-        this.section.children[1].children[3].setAttribute('type', 'number')
+        this.section.children[1].children[3].setAttribute('type', 'number');
         
-        this.addListeners()
+        this.addListeners();
     
     }
 
@@ -48,20 +48,20 @@ export default class addItem{
 
         this.open_button.addEventListener( 'click', (e) => {
             this.updateSelect();
-            e.preventDefault()
+            e.preventDefault();
         });
 
-        this.add_button.addEventListener('click', () => this.addToList())
+        this.add_button.addEventListener('click', () => this.addToList());
     }
 
     
     updateSelect() {
-        [...this.list].forEach( el => {
+        console.log(this.list);
+        [...this.select].forEach( el => {
+            this.select.remove(el);
+        })
+        this.list.forEach( el => {
             const { category } = el;
-            [...this.select].find( option => option.value === category ) !== undefined 
-            ?
-            null
-            :
             this.select.add(new Option(category , category));
         })
     }
@@ -84,15 +84,25 @@ export default class addItem{
         }
         else if( measure_condition() ){
             add_borders();
-            alert('Nie wybrałeś miary')
+            alert('Nie wybrałeś miary');
         }
         else{
+            add_borders();
             const index = this.list.findIndex( el => el.category === this.select.value );
             this.list[index] = {
                 ...this.list[index],
                 items: [...this.list[index].items, new Item(name.value, quantity.value, measure.value)]
             };
-            this.update('add_item', this.list[index])
+            this.update('add_item', this.list[index]);
         }
+    }
+
+    
+    removeFromList(deleted_item,id){
+        const index = this.list.findIndex( el => el.category === deleted_item );
+        this.list[index] = {
+            ...this.list[index],
+            items: this.list[index].items.filter( el => el.id !== id)
+        };
     }
 }

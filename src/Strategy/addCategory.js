@@ -2,10 +2,10 @@ export default class addCategory{
 
     constructor(list, update){
 
-        this.update = update
-        this.list = list
-        this.body = document.querySelector('body')
-        this.section = document.createElement('section')
+        this.update = update;
+        this.list = list;
+        this.body = document.querySelector('body');
+        this.section = document.createElement('section');
 
     }
     
@@ -19,25 +19,32 @@ export default class addCategory{
 
         button.innerHTML = "Dodaj kategorię";
 
-        [input, button].forEach( el => section.appendChild(el) )
+        [input, button].forEach( el => section.appendChild(el) );
         this.body.appendChild(section);
     
         button.addEventListener( 'click', () => {
-
-            this.list.find( el => el.category === input.value ) !== undefined ?
-            
-            console.log('ta kategoria juz istnieje')
-            :
-            (
-                this.list.push({
-                category: input.value,
-                items: []
-                }),
-                this.update('add_category', input.value)
-            )
+            if( this.list.find( el => el.category === input.value ) !== undefined || input.value === "" ){
+                return
+            }
+            else{
+                this.add_category(input.value)
+            }
         });
 
     }
 
+    add_category(value){
+        this.list.push({
+            category: value,
+            items: []
+        }),
+        this.update('add_category', value)
+    }
 
+    delete_category(deleted_category){
+        console.log(this.list)
+        const index = this.list.find( el => el.category === deleted_category );
+        let removed_item = this.list.indexOf(index);
+        this.list.splice(removed_item, 1);
+    }
 }

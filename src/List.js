@@ -5,15 +5,15 @@ export default class List {
     constructor(){
 
         this.body = document.querySelector('body');
-        this.list = []
+        this.list = [];
 
         this.newlist = document.createElement('ul');
         this.newlist.classList.add('products_list');
 
-        new addItem(this.list, this.update).createSection()
-        new addCategory(this.list, this.update).createSection()
+        new addItem(this.list, this.update).createSection();
+        new addCategory(this.list, this.update).createSection();
 
-        this.body.appendChild(this.newlist)
+        this.body.appendChild(this.newlist);
     }
 
 
@@ -33,28 +33,30 @@ export default class List {
                const quantity = document.createElement('p');
                const name = document.createElement('p');
 
-               const item_details = load.items[load.items.length - 1]
-               name.innerHTML = item_details.name 
-               quantity.innerHTML = item_details.quantity + item_details.measure
-               edit_item.innerHTML = "Edytuj"
-               remove_item.innerHTML = "Usuń"
+               const item_details = load.items[load.items.length - 1];
+
+               name.innerHTML = item_details.name ;
+               quantity.innerHTML = item_details.quantity + item_details.measure;
+               edit_item.innerHTML = "Edytuj";
+               remove_item.innerHTML = "Usuń";
 
                remove_item.addEventListener('click', (e) => {
-                   this.update('delete_item', [load.category, e.target])
+                   this.update('delete_item', [load.category, e.target, item_details.id]);
                })
 
-               item.appendChild(name)
-               item.appendChild(quantity)
-               item.appendChild(edit_item)
-               item.appendChild(remove_item)
+               item.appendChild(name);
+               item.appendChild(quantity);
+               item.appendChild(edit_item);
+               item.appendChild(remove_item);
 
-               category.appendChild(item)
+               category.appendChild(item);
             }
             break;
 
 
             case 'delete_item' : {
                 document.querySelector(`.${load[0]}`).removeChild(load[1].parentNode);
+                new addItem(this.list).removeFromList(load[0], load[2])
             }
             break;
             
@@ -63,25 +65,31 @@ export default class List {
                 const ul = document.createElement('ul');
                 const span = document.createElement('span');
                 const h3 = document.createElement('h3');
+
                 h3.innerHTML = load;
-                remove_category.innerHTML = "Usuń"
-                span.appendChild(h3)
-                span.appendChild(remove_category)
-                ul.appendChild(span)
-                ul.classList.add(load)
-                lista.appendChild(ul)
+                remove_category.innerHTML = "Usuń";
+                remove_category.addEventListener('click', (e) => {
+                    this.update('delete_category', [load, e.target])
+                });
+
+                span.appendChild(h3);
+                span.appendChild(remove_category);
+                ul.appendChild(span);
+                ul.classList.add(load);
+                lista.appendChild(ul);
             }
             break;
 
 
             case 'delete_category' : {
-                console.log('deletecategory')
+               lista.removeChild(load[1].parentNode.parentNode);
+               new addCategory(this.list).delete_category(load[0])
             }
             break;
 
 
             case 'update_item' : {
-                console.log('deletecategory')
+                console.log('deletecategory');
             }
             break;
 

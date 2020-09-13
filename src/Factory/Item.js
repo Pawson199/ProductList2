@@ -5,7 +5,8 @@ export default class Item {
        this.state = {
            name: '',
            quantity: 0,
-           measure:''
+           measure:'',
+           id: Math.random() * 21.6 * Math.random() * 23.4
        }
 
        this.setName(pushed_name);

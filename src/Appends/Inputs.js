@@ -1,4 +1,4 @@
-export default function Inputs(inner1, inner2, type, name, flag){
+export default function Inputs(inner1, inner2, type1, type2, name, flag){
 
     const box = document.createElement('div');
 
@@ -6,17 +6,24 @@ export default function Inputs(inner1, inner2, type, name, flag){
 
         const label = document.createElement('label');
         const input = document.createElement('input');
-        input.setAttribute('type', type);
         input.setAttribute('name', name);
 
-        i === 0 ? (
+        i === 0 ? 
+        (
+            (
             label.innerHTML = inner1,
+            input.setAttribute('type', type1) 
+            ),
             flag ?
             input.value = inner1
             : 
             null 
-        ):(
+        )
+        :(
+            (
             label.innerHTML = inner2,
+            input.setAttribute('type', type2)
+            ),
             flag ?
             input.value = inner2
             :

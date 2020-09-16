@@ -1,16 +1,14 @@
+import update from '../Appends/ListUpdate'
+
 export default class addCategory{
 
-    constructor(list, update){
-
-        this.update = update;
+    constructor(list){
         this.list = list;
         this.body = document.querySelector('body');
         this.section = document.createElement('section');
-
     }
     
     createSection(){
-
         const section = this.section;
         section.classList.add('add_category_field');
 
@@ -19,7 +17,8 @@ export default class addCategory{
 
         button.innerHTML = "Dodaj kategorię";
 
-        [input, button].forEach( el => section.appendChild(el) );
+        this.body.appendChild(input);
+        this.body.appendChild(button);
         this.body.appendChild(section);
     
         button.addEventListener( 'click', () => {
@@ -30,19 +29,17 @@ export default class addCategory{
                 this.add_category(input.value)
             }
         });
-
     }
 
     add_category(value){
         this.list.push({
             category: value,
             items: []
-        }),
-        this.update('add_category', value)
+        })
+        update('add_category', value, this.delete_category.bind(this));
     }
 
     delete_category(deleted_category){
-        console.log(this.list)
         const index = this.list.find( el => el.category === deleted_category );
         let removed_item = this.list.indexOf(index);
         this.list.splice(removed_item, 1);

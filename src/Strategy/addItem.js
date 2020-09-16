@@ -1,30 +1,27 @@
 import Item from '../Factory/Item'
-import Inputs from './Appends/Inputs'
+import Inputs from '../Appends/Inputs'
+import update from '../Appends/ListUpdate'
 
 export default class addItem{
 
-    constructor(list, update){
-
+    constructor(list){
         this.body = document.querySelector('body');
         this.select = document.createElement('select');
         this.section = document.createElement('section');
         this.add_button = document.createElement('button');
         this.open_button = document.createElement('button');
-        
-        this.update = update;
+
         this.list = list;
     };
 
-
     createSection() {
-
         this.body.appendChild(this.section);
 
         this.section.appendChild(
-            Inputs('kg', 'szt', 'radio', 'measure', true )
-        )
+            Inputs('kg', 'szt', 'radio', 'radio', 'measure', true )
+        );
         this.section.appendChild(
-            Inputs('Nazwa', 'Ilość', 'text', '', false )
+            Inputs('Nazwa', 'Ilość', 'text', 'number', '', false )
         );
 
         this.add_button.innerHTML = 'Zapisz';
@@ -33,39 +30,26 @@ export default class addItem{
         this.body.appendChild(this.open_button);
         this.section.appendChild(this.select);
         this.section.appendChild(this.add_button);
-        
+
         this.section.classList.add('adding_container');
         this.open_button.classList.add('add_item_button');
-
-        this.section.children[1].children[3].setAttribute('type', 'number');
         
-        this.addListeners();
-    
-    }
-
-
-    addListeners(){
-
         this.open_button.addEventListener( 'click', (e) => {
             this.updateSelect();
             e.preventDefault();
         });
-
         this.add_button.addEventListener('click', () => this.addToList());
     }
 
-    
     updateSelect() {
-        console.log(this.list);
         [...this.select].forEach( el => {
             this.select.remove(el);
-        })
+        });
         this.list.forEach( el => {
             const { category } = el;
             this.select.add(new Option(category , category));
-        })
+        });
     }
-
 
     addToList(){
         const dir = this.section.children;
@@ -93,12 +77,11 @@ export default class addItem{
                 ...this.list[index],
                 items: [...this.list[index].items, new Item(name.value, quantity.value, measure.value)]
             };
-            this.update('add_item', this.list[index]);
+            update('add_item', this.list[index], this.removeFromList.bind(this))
         }
     }
-
     
-    removeFromList(deleted_item,id){
+    removeFromList(deleted_item, id){
         const index = this.list.findIndex( el => el.category === deleted_item );
         this.list[index] = {
             ...this.list[index],

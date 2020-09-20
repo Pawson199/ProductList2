@@ -1,6 +1,6 @@
 import update from '../Appends/ListUpdate'
 
-export default class addCategory{
+export default class categoryStrategy{
 
     constructor(list){
         this.list = list;
@@ -36,7 +36,8 @@ export default class addCategory{
             category: value,
             items: []
         })
-        update('add_category', value, this.delete_category.bind(this));
+        update('add_category', value, this.list);
+        console.log(this.list)
     }
 
     delete_category(deleted_category){

@@ -1,6 +1,8 @@
+import itemStrategy from "../Strategy/itemStrategy";
+import categoryStrategy from "../Strategy/categoryStrategy";
 
 
-export default function update(action, load, remover){
+export default function update(action, load, list){
 
     const lista = document.querySelector('.products_list');
 
@@ -8,31 +10,42 @@ export default function update(action, load, remover){
     const remove_item = document.createElement('button');
     const remove_category = document.createElement('button');
 
+    const category_functions = new categoryStrategy(list);
+    const items_functions = new itemStrategy(list)
 
     switch(action){
 
         case 'add_item' : {
            const category = document.getElementsByClassName(`${load.category}`)[0];
            const item = document.createElement('li');
-           const quantity = document.createElement('p');
-           const name = document.createElement('p');
+           const quantity = document.createElement('input');
+           const quantity_type = document.createElement('p');
+           const name_desc = document.createElement('p');
+           const name = document.createElement('input');
 
-           const item_details = load.items[load.items.length - 1];
+           const item_details = load.item;
 
-           name.innerHTML = item_details.name;
-           quantity.innerHTML = item_details.quantity + item_details.measure;
+           name.value = item_details.name;
+           name.disabled = true;
+           name_desc.innerHTML = "Nazwa produktu:"
+           quantity.value = item_details.quantity;
+           quantity.disabled = true; 
+           quantity_type.innerHTML = 'Ilość w ' + item_details.measure + ':' ;
            edit_item.innerHTML = "Edytuj";
            remove_item.innerHTML = "Usuń";
 
            remove_item.addEventListener('click', (e) => {
-                remover(load.category, item_details.id);
-                update('delete_item',[load.category, e.target])
+                items_functions.removeFromList(load.category, item_details.id);
+                update('delete_item', [load.category, e.target], list)
            }) 
            edit_item.addEventListener('click', (e) => {
-                update('update_item', [e.target]);
+                items_functions.updateList(load.category, item_details.id, [quantity.value, name.value]);
+                update('update_item', e.target, list);
            })
 
+           item.appendChild(name_desc);
            item.appendChild(name);
+           item.appendChild(quantity_type);
            item.appendChild(quantity);
            item.appendChild(edit_item);
            item.appendChild(remove_item);
@@ -52,19 +65,20 @@ export default function update(action, load, remover){
             const ul = document.createElement('ul');
             const span = document.createElement('span');
             const h3 = document.createElement('h3');
-
+        
             h3.innerHTML = load;
             remove_category.innerHTML = "Usuń";
             remove_category.addEventListener('click', (e) => {
-                remover(load);
-                update('delete_category', e.target)
+                category_functions.delete_category(load);
+                update('delete_category', e.target, list)
             });
-
+            
             span.appendChild(h3);
             span.appendChild(remove_category);
             ul.appendChild(span);
             ul.classList.add(load);
             lista.appendChild(ul);
+            
         }
         break;
 
@@ -76,9 +90,27 @@ export default function update(action, load, remover){
 
 
         case 'update_item' : {
-            console.log(load)
+            const inputs = [...load.parentNode.children];
+
+        
+                if( load.innerHTML === "Edytuj" ){
+                    load.innerHTML = "Zapisz";
+                    inputs[1].disabled = false;
+                    inputs[3].disabled = false;
+                }
+                else{
+                    load.innerHTML = "Edytuj";
+                    inputs[1].disabled = true;
+                    inputs[3].disabled = true;
+                }
+            
         }
         break;
 
     }
+    
+    if( list !== undefined ){
+        localStorage.setItem('list', JSON.stringify(list))
+    }
+
 }

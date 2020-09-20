@@ -2,7 +2,7 @@ import Item from '../Factory/Item'
 import Inputs from '../Appends/Inputs'
 import update from '../Appends/ListUpdate'
 
-export default class addItem{
+export default class itemStrategy{
 
     constructor(list){
         this.body = document.querySelector('body');
@@ -57,16 +57,16 @@ export default class addItem{
         const measure = [...dir[0].children].find( el => el.checked === true );
         const quantity = dir[1].children[3];
         const name = dir[1].children[1];
-        
-        const measure_condition = () => measure !== undefined ? false : true;
+
         const add_borders = () => {
             [name, quantity, this.select ].forEach( el => { el.value === "" ? el.style.border = 'red 1px solid' : el.style.border = ''})
         }
+        
         if( quantity.value === "" || name.value === "" || this.select.value === "" ){
             add_borders();
             return
         }
-        else if( measure_condition() ){
+        else if( measure !== undefined ? false : true ){
             add_borders();
             alert('Nie wybrałeś miary');
         }
@@ -77,7 +77,12 @@ export default class addItem{
                 ...this.list[index],
                 items: [...this.list[index].items, new Item(name.value, quantity.value, measure.value)]
             };
-            update('add_item', this.list[index], this.removeFromList.bind(this))
+            const container = this.list[index];
+            update(
+                'add_item',
+                { category: container.category, item: container.items[container.items.length - 1] },
+                 this.list
+            )
         }
     }
     
@@ -88,4 +93,9 @@ export default class addItem{
             items: this.list[index].items.filter( el => el.id !== id)
         };
     }
+
+    updateList(category, id, newdata){
+        console.log(category, id, newdata)
+    }
+
 }

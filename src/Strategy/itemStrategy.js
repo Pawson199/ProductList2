@@ -1,6 +1,7 @@
 import Item from '../Factory/Item'
 import Inputs from '../Appends/Inputs'
 import update from '../Appends/ListUpdate'
+import fillSelect from '../Appends/fillSelect';
 
 export default class itemStrategy{
 
@@ -34,21 +35,8 @@ export default class itemStrategy{
         this.section.classList.add('adding_container');
         this.open_button.classList.add('add_item_button');
         
-        this.open_button.addEventListener( 'click', (e) => {
-            this.updateSelect();
-            e.preventDefault();
-        });
+        this.open_button.addEventListener( 'click', () => fillSelect(this.list, this.select));
         this.add_button.addEventListener('click', () => this.addToList());
-    }
-
-    updateSelect() {
-        [...this.select].forEach( el => {
-            this.select.remove(el);
-        });
-        this.list.forEach( el => {
-            const { category } = el;
-            this.select.add(new Option(category , category));
-        });
     }
 
     addToList(){
@@ -59,7 +47,9 @@ export default class itemStrategy{
         const name = dir[1].children[1];
 
         const add_borders = () => {
-            [name, quantity, this.select ].forEach( el => { el.value === "" ? el.style.border = 'red 1px solid' : el.style.border = ''})
+            [name, quantity, this.select ].forEach( el => { 
+                el.value === "" ? el.style.border = 'red 1px solid' : el.style.border = '';
+            })
         }
         
         if( quantity.value === "" || name.value === "" || this.select.value === "" ){
@@ -95,6 +85,7 @@ export default class itemStrategy{
     }
 
     updateList(category, id, newdata){
+
         console.log(category, id, newdata)
     }
 

@@ -1,5 +1,6 @@
 import itemStrategy from "../Strategy/itemStrategy";
 import categoryStrategy from "../Strategy/categoryStrategy";
+import fillSelect from "./fillSelect";
 
 
 export default function update(action, load, list){
@@ -90,19 +91,28 @@ export default function update(action, load, list){
 
 
         case 'update_item' : {
-            const inputs = [...load.parentNode.children];
 
+            const category = load.parentNode;
+            const inputs = [...category.children];
+
+            const select_el = document.createElement('select');
+            select_el.addEventListener('click', () => fillSelect(list, select_el));
+
+            const setDisabledOnInputs = (edited) => {
+                    inputs[1].disabled = edited;
+                    inputs[3].disabled = edited;
+            }
         
-                if( load.innerHTML === "Edytuj" ){
+            if( inputs[1].disabled ){
                     load.innerHTML = "Zapisz";
-                    inputs[1].disabled = false;
-                    inputs[3].disabled = false;
-                }
-                else{
+                    setDisabledOnInputs(false);
+                    category.appendChild(select_el);
+            }
+            else{
                     load.innerHTML = "Edytuj";
-                    inputs[1].disabled = true;
-                    inputs[3].disabled = true;
-                }
+                    setDisabledOnInputs(true);
+                    category.removeChild(category.querySelector('select'));
+            }
             
         }
         break;

@@ -1,33 +1,36 @@
-import itemStrategy from './Strategy/itemStrategy'
-import categoryStrategy from './Strategy/categoryStrategy'
-import update from './Appends/ListUpdate';
+import { createItemSection } from './Strategy/itemStrategy'
+import { createCategorySection } from './Strategy/categoryStrategy'
+import addCategory from './Appends/addCategory';
+import addItem from './Appends/addItem';
 
 export default class List {
 
     constructor(){
 
-        this.body = document.querySelector('body');
+        const checkLocalStorage = () => {
+            if( localStorage.getItem('list') !== null ){
+                if ( localStorage.getItem('list') !== undefined ) return JSON.parse(localStorage.getItem('list')) 
+                else return []
+            }
+            else return []
+        }
+        this.list = checkLocalStorage()
 
-        this.list = localStorage.getItem('list').length > 0 ? JSON.parse(localStorage.getItem('list')) : [];
+        createItemSection(this.list)
+        createCategorySection(this.list)
 
-        this.newlist = document.createElement('ul');
-        this.newlist.classList.add('products_list');
+        const section = document.createElement('section');
+        section.classList.add('list_container');
+        document.querySelector('body').appendChild(section)
 
-        new itemStrategy(this.list, this.update).createSection();
-        new categoryStrategy(this.list, this.update).createSection();
-
-        this.body.appendChild(this.newlist);
         this.createList()
+
     }
 
     createList(){
         this.list.forEach( el => {
-            update('add_category', el.category, this.list);
-           
-            el.items.forEach( item => {
-                update('add_item', {category: el.category, item : item}, this.list);
-            })
-            
+            addCategory(el.category, this.list)
+            el.items.forEach( item => addItem(el.category, item, this.list) )
         })
     }
 

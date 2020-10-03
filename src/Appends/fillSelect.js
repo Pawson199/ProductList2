@@ -8,5 +8,5 @@ export default function fillSelect(list,select) {
         const { category } = el;
         select.add(new Option(category , category));
     });
-    
+
 }

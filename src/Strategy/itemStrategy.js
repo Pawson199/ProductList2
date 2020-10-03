@@ -1,58 +1,53 @@
 import Item from '../Factory/Item'
 import Inputs from '../Appends/Inputs'
-import update from '../Appends/ListUpdate'
-import fillSelect from '../Appends/fillSelect';
+import fillSelect from '../Appends/fillSelect'
+import addToListDOM from '../Appends/addItem'
+import updateLocalStorage from "../updateLocalStorage";
 
-export default class itemStrategy{
+    const body = document.querySelector('body');
+    const select = document.createElement('select');
+    const section = document.createElement('section');
+    const add_button = document.createElement('button');
+    const open_section_button = document.createElement('button');
 
-    constructor(list){
-        this.body = document.querySelector('body');
-        this.select = document.createElement('select');
-        this.section = document.createElement('section');
-        this.add_button = document.createElement('button');
-        this.open_button = document.createElement('button');
+    function createItemSection(list) {
+        body.appendChild(section);
 
-        this.list = list;
-    };
-
-    createSection() {
-        this.body.appendChild(this.section);
-
-        this.section.appendChild(
+        section.appendChild(
             Inputs('kg', 'szt', 'radio', 'radio', 'measure', true )
         );
-        this.section.appendChild(
+        section.appendChild(
             Inputs('Nazwa', 'Ilość', 'text', 'number', '', false )
         );
 
-        this.add_button.innerHTML = 'Zapisz';
-        this.open_button.innerHTML = "Dodaj produkt";
+        add_button.innerHTML = 'Zapisz';
+        open_section_button.innerHTML = "Dodaj produkt";
 
-        this.body.appendChild(this.open_button);
-        this.section.appendChild(this.select);
-        this.section.appendChild(this.add_button);
+        body.appendChild(open_section_button);
+        section.appendChild(select);
+        section.appendChild(add_button);
 
-        this.section.classList.add('adding_container');
-        this.open_button.classList.add('add_item_button');
+        section.classList.add('adding_container');
+        open_section_button.classList.add('add_item_button');
         
-        this.open_button.addEventListener( 'click', () => fillSelect(this.list, this.select));
-        this.add_button.addEventListener('click', () => this.addToList());
+        open_section_button.addEventListener( 'click', () => fillSelect(list, select));
+        add_button.addEventListener('click', () => addToListARRAY(list));
     }
 
-    addToList(){
-        const dir = this.section.children;
+    function addToListARRAY(list){
+        const dir = section.children;
 
         const measure = [...dir[0].children].find( el => el.checked === true );
         const quantity = dir[1].children[3];
         const name = dir[1].children[1];
 
         const add_borders = () => {
-            [name, quantity, this.select ].forEach( el => { 
+            [name, quantity, select ].forEach( el => { 
                 el.value === "" ? el.style.border = 'red 1px solid' : el.style.border = '';
             })
         }
         
-        if( quantity.value === "" || name.value === "" || this.select.value === "" ){
+        if( quantity.value === "" || name.value === "" || select.value === "" ){
             add_borders();
             return
         }
@@ -62,31 +57,35 @@ export default class itemStrategy{
         }
         else{
             add_borders();
-            const index = this.list.findIndex( el => el.category === this.select.value );
-            this.list[index] = {
-                ...this.list[index],
-                items: [...this.list[index].items, new Item(name.value, quantity.value, measure.value)]
+            const index = list.findIndex( el => el.category === select.value );
+            const category = list[index];
+            list[index] = {
+                ...category,
+                items: [...category.items, new Item(name.value, quantity.value, measure.value)]
             };
-            const container = this.list[index];
-            update(
-                'add_item',
-                { category: container.category, item: container.items[container.items.length - 1] },
-                 this.list
-            )
+            addToListDOM(select.value, list[index].items[list[index].items.length - 1], list)
+            updateLocalStorage(list)
         }
     }
     
-    removeFromList(deleted_item, id){
-        const index = this.list.findIndex( el => el.category === deleted_item );
-        this.list[index] = {
-            ...this.list[index],
-            items: this.list[index].items.filter( el => el.id !== id)
+    function removeFromList(deleted_item, id, list){
+        const index = list.findIndex( el => el.category === deleted_item );
+        list[index] = {
+            ...list[index],
+            items: list[index].items.filter( el => el.id !== id)
         };
     }
 
-    updateList(category, id, newdata){
+    function updateList(category, id, newdata){
 
-        console.log(category, id, newdata)
+        const index = list.findIndex( el => el.category === category );
+        const item_index = list[index].items.findIndex( el => el.id === id );
+
+        list[index].items[item_index] = {
+            ...list[index].items[item_index],
+            name: newdata[1],
+            quantity: newdata[0]
+        }
     }
 
-}
+    export { createItemSection, addToListARRAY, removeFromList, updateList }

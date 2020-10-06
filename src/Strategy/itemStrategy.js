@@ -80,22 +80,19 @@ import updateLocalStorage from "../updateLocalStorage";
         const index = list.findIndex( el => el.category === category );
         const item_index = list[index].items.findIndex( el => el.id === item.id );
 
-        move ? 
-        (
+        move ?
             list[index].items[item_index] = {
                 ...list[index].items[item_index],
                 name: newdata[1],
                 quantity: newdata[0]
             } 
-        )
         :
             list[index].items.push({
-                name: item.name,
-                quantity: item.quantity,
+                name: newdata[1],
+                quantity: newdata[0],
                 measure: item.measure,
                 id: Math.random() * 21.6 * Math.random() * 23.4
             })
-            // USUN Z ARRAY ITEM, KTORY DODAJESZ DO NOWEJ TABLICY
 
         updateLocalStorage(list)
     }

@@ -1,44 +1,45 @@
 import fillSelect from "./fillSelect";
 import updateLocalStorage from "../updateLocalStorage";
 import { removeFromList, updateList } from "../Strategy/itemStrategy";
+import Item from "../Factory/Item";
 
 export default function addItem(category, item, list){
 
-const edit_item = document.createElement('button');
-const remove_item = document.createElement('button');
-const item_element = document.createElement('li');
-const quantity = document.createElement('input');
-const quantity_type = document.createElement('p');
-const name_desc = document.createElement('p');
-const name = document.createElement('input');
-const select_el = document.createElement('select');
+        const edit_item = document.createElement('button');
+        const remove_item = document.createElement('button');
+        const item_element = document.createElement('li');
+        const quantity = document.createElement('input');
+        const quantity_type = document.createElement('p');
+        const name_desc = document.createElement('p');
+        const name = document.createElement('input');
+        const select_el = document.createElement('select');
 
-const item_parent = document.getElementsByClassName(`${category}`)[0];
+        const item_parent = document.getElementsByClassName(`${category}`)[0];
 
-name.value = item.name;
-quantity.value = item.quantity;
-name.disabled = true;
-quantity.disabled = true;
+        name.value = item.name;
+        quantity.value = item.quantity;
+        name.disabled = true;
+        quantity.disabled = true;
 
-name_desc.innerHTML = "Nazwa produktu:" 
-quantity_type.innerHTML = 'Ilość w ' + item.measure + ':' ;
-edit_item.innerHTML = "Edytuj";
-remove_item.innerHTML = "Usuń";
+        name_desc.innerHTML = "Nazwa produktu:" 
+        quantity_type.innerHTML = 'Ilość w ' + item.measure + ':' ;
+        edit_item.innerHTML = "Edytuj";
+        remove_item.innerHTML = "Usuń";
 
-remove_item.onclick = (e) => {
-        item_parent.removeChild(item_element);
-        removeFromList(category, item.id, list);
-        updateLocalStorage(list)
-}
-edit_item.onclick = (e) => {
-        fillSelect(list, select_el);
-        updateEdited(category, item, select_el, list, name, quantity);
-        close_edited_elements(item_parent, e.target, select_el);
-}
+        remove_item.onclick = (e) => {
+                item_parent.removeChild(item_element);
+                removeFromList(category, item.id, list);
+                updateLocalStorage(list)
+        }
+        edit_item.onclick = (e) => {
+                fillSelect(list, select_el);
+                updateEdited(category, item, select_el, list, name, quantity);
+                close_edited_elements(item_parent, e.target, select_el);
+        }
 
-const taba = [name_desc, name, quantity_type, quantity, edit_item, remove_item];
-taba.forEach( el => item_element.appendChild(el))
-item_parent.appendChild(item_element);
+        const taba = [name_desc, name, quantity_type, quantity, edit_item, remove_item];
+        taba.forEach( el => item_element.appendChild(el))
+        item_parent.appendChild(item_element);
 
 }
 
@@ -75,13 +76,31 @@ const close_edited_elements = (list, target, select) => {
 }
 
 const updateEdited = (category, item, select, list, name, quantity) => {
-        if( select.getAttribute('category') === category || JSON.stringify(select.getAttribute('category')) === 'null' ){
+
+        const category_att = select.getAttribute('category');
+        const ifDataIsIncorrect = () => {
+                const only_numbers = RegExp(/^\d+$/);
+                if(!only_numbers.test( quantity.value )){
+                        name.value = item.name;
+                        quantity.value = item.quantity;
+                        alert('Ilość musi być numerem');
+                        return true
+                }
+                else return false
+        }
+
+        if( category_att === category || JSON.stringify(category_att) === 'null' ){
+                if (ifDataIsIncorrect()) return
                 updateList(category, item, [quantity.value, name.value], list, true)
         }
         else{
-                updateList(select.getAttribute('category'), item, [quantity.value, name.value], list, false);
-                //USUN STAD POPRZEDNI ELEMENT
+                if (ifDataIsIncorrect()) return
+                removeFromList(category, item.id, list);
+                updateList(category_att, item, [quantity.value, name.value], list, false);
+                addItem( category_att, new Item(name.value, quantity.value, item.measure), list);
+                document.querySelector(`.${category}`).removeChild(select.parentNode)
         }
+
 }
 
 const modify_mode = (input_switch, button_text, set_or_remove, select, item) => {
@@ -102,6 +121,7 @@ const modify_mode = (input_switch, button_text, set_or_remove, select, item) => 
         (       
                 item.setAttribute('open', "true"),
                 item.appendChild(select),
+                select.setAttribute('category', select.value),
                 select.addEventListener('change', e => newSelectValue(e))
         )
         :

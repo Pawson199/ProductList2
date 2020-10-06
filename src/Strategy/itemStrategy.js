@@ -76,16 +76,28 @@ import updateLocalStorage from "../updateLocalStorage";
         };
     }
 
-    function updateList(category, id, newdata){
-
+    function updateList(category, item, newdata, list, move){
         const index = list.findIndex( el => el.category === category );
-        const item_index = list[index].items.findIndex( el => el.id === id );
+        const item_index = list[index].items.findIndex( el => el.id === item.id );
 
-        list[index].items[item_index] = {
-            ...list[index].items[item_index],
-            name: newdata[1],
-            quantity: newdata[0]
-        }
+        move ? 
+        (
+            list[index].items[item_index] = {
+                ...list[index].items[item_index],
+                name: newdata[1],
+                quantity: newdata[0]
+            } 
+        )
+        :
+            list[index].items.push({
+                name: item.name,
+                quantity: item.quantity,
+                measure: item.measure,
+                id: Math.random() * 21.6 * Math.random() * 23.4
+            })
+            // USUN Z ARRAY ITEM, KTORY DODAJESZ DO NOWEJ TABLICY
+
+        updateLocalStorage(list)
     }
 
     export { createItemSection, addToListARRAY, removeFromList, updateList }

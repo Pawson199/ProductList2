@@ -32,11 +32,9 @@ remove_item.onclick = (e) => {
 }
 edit_item.onclick = (e) => {
         fillSelect(list, select_el);
-        close_edited_elements(item_parent, e.target, select_el)
+        updateEdited(category, item, select_el, list, name, quantity);
+        close_edited_elements(item_parent, e.target, select_el);
 }
-select_el.addEventListener('change', (e) => {
-        select_el.value = e.target.value
-})
 
 const taba = [name_desc, name, quantity_type, quantity, edit_item, remove_item];
 taba.forEach( el => item_element.appendChild(el))
@@ -65,33 +63,52 @@ const close_edited_elements = (list, target, select) => {
                         else{
                                 if( item.children[1].disabled === true ){
                                         modify_mode( false, 'Zapisz', true, select, item );
-                                        console.log(select.value)
                                 }
                                 else{
-                                        modify_mode( true, 'Edytuj', false, select, item )
-                                        console.log(select.value)
+                                        modify_mode( true, 'Edytuj', false, select, item );
                                 }
                         }
-                }) 
+                })
 
         })
 
 }
 
+const updateEdited = (category, item, select, list, name, quantity) => {
+        if( select.getAttribute('category') === category || JSON.stringify(select.getAttribute('category')) === 'null' ){
+                updateList(category, item, [quantity.value, name.value], list, true)
+        }
+        else{
+                updateList(select.getAttribute('category'), item, [quantity.value, name.value], list, false);
+                //USUN STAD POPRZEDNI ELEMENT
+        }
+}
+
 const modify_mode = (input_switch, button_text, set_or_remove, select, item) => {
 
-        item.children[1].disabled = input_switch;
-        item.children[3].disabled = input_switch;
-        item.children[4].innerHTML = button_text;
+        const name = item.children[1];
+        const quantity = item.children[3]
+        const buttonText = item.children[4];
+
+        name.disabled = input_switch;
+        quantity.disabled = input_switch;
+        buttonText.innerHTML = button_text;
+
+        const newSelectValue = (t) => {
+                t.target.setAttribute('category', t.target.value)
+        }
 
         set_or_remove ?
         (       
                 item.setAttribute('open', "true"),
-                item.appendChild(select)
+                item.appendChild(select),
+                select.addEventListener('change', e => newSelectValue(e))
         )
         :
         (       
                 item.removeAttribute('open', "true"),
+                select.removeEventListener('change', e => newSelectValue(e)),
+                select.removeAttribute('category'),
                 item.removeChild(select)
         )
 

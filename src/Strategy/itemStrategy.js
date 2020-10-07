@@ -17,7 +17,7 @@ import updateLocalStorage from "../updateLocalStorage";
             Inputs('Nazwa', 'Ilość', 'text', 'number', '', false )
         );
         section.appendChild(
-            Inputs('kg', 'szt', 'radio', 'radio', 'measure', true )
+            Inputs('Kg', 'Szt', 'radio', 'radio', 'measure', true )
         );
 
         add_button.innerHTML = 'Zapisz';
@@ -41,21 +41,19 @@ import updateLocalStorage from "../updateLocalStorage";
         });
         add_button.addEventListener('click', () => {
             addToListARRAY(list);
-            section_wrapper.classList.toggle('show_section')
         });
 
     }
 
     function addToListARRAY(list){
         const dir = section.children;
-
-        const measure = [...dir[0].children].find( el => el.checked === true );
-        const quantity = dir[1].children[3];
-        const name = dir[1].children[1];
+        const measure = [...dir[1].children].find( el => el.checked === true );
+        const quantity = dir[0].children[3];
+        const name = dir[0].children[1];
 
         const add_borders = () => {
             [name, quantity, select ].forEach( el => { 
-                el.value === "" ? el.style.border = 'red 1px solid' : el.style.border = '';
+                el.value === "" ? el.style.border = 'blue 1px dotted' : el.style.border = '';
             })
         }
         
@@ -77,6 +75,8 @@ import updateLocalStorage from "../updateLocalStorage";
             };
             addToListDOM(select.value, list[index].items[list[index].items.length - 1], list)
             updateLocalStorage(list)
+            document.getElementsByClassName('section_wraper')[0].classList.toggle('show_section')
+
         }
     }
     

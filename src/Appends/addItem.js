@@ -22,7 +22,7 @@ export default function addItem(category, item, list){
         quantity.disabled = true;
 
         name_desc.innerHTML = "Nazwa produktu:" 
-        quantity_type.innerHTML = 'Ilość w ' + item.measure + ':' ;
+        quantity_type.innerHTML = 'Ilość w ' +  item.measure.toLowerCase() + ':' ;
         edit_item.innerHTML = "Edytuj";
         remove_item.innerHTML = "Usuń";
 

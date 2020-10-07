@@ -4,9 +4,7 @@
     justify-content: $justify;
     align-items: $align;
 }
-*{
-    box-sizing: border-box;
-}
+
 body{
     font-size: 20px;
     margin: 0;
@@ -21,10 +19,40 @@ body{
     top: -100%;
     transition: 700ms ease;
     @include display-flex(center, center, column);
-        & section{
+        & .adding_container{
             background-color: orangered;
             border-radius: 20px;
             padding: 2rem;
+                & div:nth-child(1){
+                    @include display-flex(center, flex-start, column);
+                        & label{
+                            margin-top: 1rem;
+                            font-family: monospace;
+                        }
+                }
+                & div:nth-child(2){
+                    margin-top: 1rem;
+                    @include display-flex(flex-start, center, row);
+                        & label{
+                            font-family: monospace;
+                        }
+                        & label:nth-child(3){
+                            margin-left: 1.3rem;
+                        }
+                        & input{
+                            margin: 0 0 0 0.5rem;
+                        }
+                }
+                & select, button {
+                    margin: 1rem 0;
+                    width: 50%;
+                    padding: 0.5rem;
+                }
+                & button{
+                    background-color: rgba(255, 255, 255, 0);
+                    font-family: monospace;
+                    border: white 1px solid;
+                }
         }
 }
 
@@ -45,14 +73,19 @@ body{
     color: white;
     cursor: pointer;
     font-size: 3rem;
+    padding: 0.75rem 0;
     border: 0;
     z-index: 1999;
-    @include display-flex(center,center,column);
+    font-family: Arial, Helvetica, sans-serif;
+
         &:hover{
             transform: scale(0.94);
             & .adding_container{
                 position: absolute;
             }
+        }
+        &:focus{
+            outline: 0px transparent !important;
         }
         &:active{
             transform: scale(0.90);

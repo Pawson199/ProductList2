@@ -14,24 +14,36 @@ import updateLocalStorage from "../updateLocalStorage";
         body.appendChild(section);
 
         section.appendChild(
-            Inputs('kg', 'szt', 'radio', 'radio', 'measure', true )
+            Inputs('Nazwa', 'Ilość', 'text', 'number', '', false )
         );
         section.appendChild(
-            Inputs('Nazwa', 'Ilość', 'text', 'number', '', false )
+            Inputs('kg', 'szt', 'radio', 'radio', 'measure', true )
         );
 
         add_button.innerHTML = 'Zapisz';
-        open_section_button.innerHTML = "Dodaj produkt";
+        open_section_button.innerHTML = "+";
 
         body.appendChild(open_section_button);
         section.appendChild(select);
         section.appendChild(add_button);
 
+        const section_wrapper = document.createElement('section');
+        section_wrapper.classList.add('section_wraper')
+        section_wrapper.appendChild(section);
+        body.appendChild(section_wrapper)
+
         section.classList.add('adding_container');
         open_section_button.classList.add('add_item_button');
         
-        open_section_button.addEventListener( 'click', () => fillSelect(list, select));
-        add_button.addEventListener('click', () => addToListARRAY(list));
+        open_section_button.addEventListener( 'click', () => {
+            fillSelect(list, select)
+            section_wrapper.classList.toggle('show_section')
+        });
+        add_button.addEventListener('click', () => {
+            addToListARRAY(list);
+            section_wrapper.classList.toggle('show_section')
+        });
+
     }
 
     function addToListARRAY(list){

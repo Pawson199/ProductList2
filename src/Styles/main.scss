@@ -1,0 +1,60 @@
+@mixin display-flex($justify, $align, $direction) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify;
+    align-items: $align;
+}
+*{
+    box-sizing: border-box;
+}
+body{
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+.section_wraper{
+    background-color: rgba(255, 255, 255, 0);
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: -100%;
+    transition: 700ms ease;
+    @include display-flex(center, center, column);
+        & section{
+            background-color: orangered;
+            border-radius: 20px;
+            padding: 2rem;
+        }
+}
+
+.show_section{
+    opacity: 1;
+    z-index: 999;
+    top: 0;
+}
+
+.add_item_button{
+    width: 5rem;
+    height: 5rem;
+    position: fixed;
+    bottom: 3rem;
+    right: 3rem;
+    border-radius: 50px;
+    background-color: orangered;
+    color: white;
+    cursor: pointer;
+    font-size: 3rem;
+    border: 0;
+    z-index: 1999;
+    @include display-flex(center,center,column);
+        &:hover{
+            transform: scale(0.94);
+            & .adding_container{
+                position: absolute;
+            }
+        }
+        &:active{
+            transform: scale(0.90);
+        }
+}

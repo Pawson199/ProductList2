@@ -1,0 +1,22 @@
+@import './mixins';
+
+.add_category_field{
+    & *{
+        padding: 0.6rem;
+    }
+    @include display-flex(center, center, row);
+    button{
+        background-color: rgba(95, 88, 88, 0.226);
+        font-family: monospace;
+        font-weight: bold;
+        font-size: 1rem;
+        border: 0;
+        border-radius: 50px;
+        margin-left: 1rem;
+    }
+    input{
+        border: 0;
+        font-family: monospace;
+        border-bottom: 3px solid orangered;
+    }
+}

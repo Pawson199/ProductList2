@@ -8,8 +8,9 @@ import updateLocalStorage from "../updateLocalStorage";
 
     function createCategorySection(list){
         const input = document.createElement('input');
+        input.placeholder = 'Nowa kategoria'
         const button = document.createElement('button');
-        button.innerHTML = "Dodaj kategorię";
+        button.innerHTML = "Dodaj";
         [input, button].forEach( el => section.appendChild(el) )
         body.appendChild(section)
         button.addEventListener( 'click', () => addCategoryARRAY(list, input.value));

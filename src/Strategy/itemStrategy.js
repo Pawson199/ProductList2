@@ -9,6 +9,7 @@ import updateLocalStorage from "../updateLocalStorage";
     const section = document.createElement('section');
     const add_button = document.createElement('button');
     const open_section_button = document.createElement('button');
+    const section_wrapper = document.createElement('section');
 
     function createItemSection(list) {
         body.appendChild(section);
@@ -27,11 +28,7 @@ import updateLocalStorage from "../updateLocalStorage";
         section.appendChild(select);
         section.appendChild(add_button);
 
-        const section_wrapper = document.createElement('section');
         section_wrapper.classList.add('section_wraper')
-        section_wrapper.appendChild(section);
-        body.appendChild(section_wrapper)
-
         section.classList.add('adding_container');
         open_section_button.classList.add('add_item_button');
         
@@ -42,6 +39,9 @@ import updateLocalStorage from "../updateLocalStorage";
         add_button.addEventListener('click', () => {
             addToListARRAY(list);
         });
+
+        section_wrapper.appendChild(section);
+        body.appendChild(section_wrapper)
 
     }
 

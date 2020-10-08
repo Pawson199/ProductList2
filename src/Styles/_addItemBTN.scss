@@ -1,0 +1,30 @@
+@import './mixins';
+
+.add_item_button{
+    width: 5rem;
+    height: 5rem;
+    position: fixed;
+    bottom: 3rem;
+    right: 3rem;
+    border-radius: 50px;
+    background-color: orangered;
+    color: white;
+    cursor: pointer;
+    font-size: 3rem;
+    padding: 0.75rem 0;
+    border: 0;
+    z-index: 1999;
+    font-family: Arial, Helvetica, sans-serif;
+        &:hover{
+            transform: scale(0.94);
+                & .adding_container{
+                    position: absolute;
+                }
+        }
+        &:focus{
+            outline: 0px transparent !important;
+        }
+        &:active{
+            transform: scale(0.90);
+        }
+}
